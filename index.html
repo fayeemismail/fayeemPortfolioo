@@ -17,6 +17,9 @@
   <link
     href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i|Playfair+Display:400,400i,500,500i,600,600i,700,700i,900,900i"
     rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+
 
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -382,46 +385,36 @@
             <div class="col-lg-6">
               <form
                 action="https://script.google.com/macros/s/AKfycbynXtRqNFgb2KZ2idXtJnLkTw1l0EKoGTVNtNVUPEjMCt2G8jQaXZzL-hSO_n1z1Wbm/exec"
-                id="form" method="post" role="form" class="php-email-form">
+                id="form" method="post" role="form" class="php-email-form" onsubmit="sendmessage(event)">
                 <div class="row gy-3">
-
                   <div class="col-lg-6">
                     <div class="form-group contact-block1">
                       <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
                     </div>
                   </div>
-
                   <div class="col-lg-6">
                     <div class="form-group">
-                      <input type="email" class="form-control" name="email" id="email" placeholder="Your Email"
-                        required>
+                      <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
                     </div>
                   </div>
-
                   <div class="col-lg-12">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject"
-                        required>
+                      <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
                     </div>
                   </div>
-
                   <div class="col-lg-12">
                     <div class="form-group">
-                      <textarea class="form-control" name="message" id="message" placeholder="Message"
-                        required></textarea>
+                      <textarea class="form-control" name="message" id="message" placeholder="Message" required></textarea>
                     </div>
                   </div>
-
                   <div class="col-lg-12">
                     <div class="loading">Loading</div>
                     <div class="error-message"></div>
                     <div class="sent-message">Your message has been sent. Thank you!</div>
                   </div>
-
                   <div class="mt-0">
                     <input type="submit" class="btn btn-defeault btn-send" value="Send message">
                   </div>
-
                 </div>
               </form>
             </div>
@@ -471,6 +464,12 @@
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/vendor/typed.js/typed.umd.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+
+
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
@@ -493,6 +492,31 @@
       })
     })
   </script>
+  <script>
+  function sendmessage(event) {
+    event.preventDefault();
+
+    const form = document.getElementById('form');
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => {
+        if (response.ok) {
+          swal("Success!", "Your message has been sent. Thank you!", "success");
+          form.reset();
+        } else {
+          swal("Error!", "There was a problem sending your message. Please try again.", "error");
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        swal("Error!", "Network error. Please try again later.", "error");
+      });
+  }
+</script>
 
 </body>
 
@@ -500,11 +524,5 @@
 
 
 
-
-
-
-function doGet(e) {
-  return HtmlService.createHtmlOutput("Request received.");
-}
 
 
